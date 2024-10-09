@@ -14,8 +14,96 @@ datasource db {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
-  password String  @db.VarChar(255)
-  pseudo   String?
+  id         Int          @id @default(autoincrement())
+  email      String       @unique
+  password   String       @db.VarChar(255)
+  pseudo     String?
+  medicament Medicament[]
+  pilulier   Pilulier[]
+}
+
+model Medicament {
+  id                  Int                  @id @default(autoincrement())
+  nom                 String
+  dateExpiration      DateTime
+  description         String
+  stockDisponible     Int
+  dosage              Int
+  forme_pharmacotique String
+  avecOrdonnance      Boolean
+  User                User                 @relation(fields: [userId], references: [id])
+  userId              Int
+  Image               Image[]
+  EffetSecondaires    EffetSecondaire[]
+  Pilulier            Pilulier[]
+  MedicamentPilulier  MedicamentPilulier[]
+}
+
+model Image {
+  id            Int         @id @default(autoincrement())
+  nomOriginal   String
+  Cheminfichier String
+  size          Float?
+  Medicament    Medicament? @relation(fields: [medicamentId], references: [id])
+  medicamentId  Int?
+}
+
+model Pilulier {
+  id                    Int                     @id @default(autoincrement())
+  quantite              Int
+  EstPris               Boolean
+  User                  User?                   @relation(fields: [userId], references: [id])
+  userId                Int?
+  PilulierJour          PilulierJour[]
+  PilulierMomentJournee PilulierMomentJournee[]
+  Medicament            Medicament?             @relation(fields: [medicamentId], references: [id])
+  medicamentId          Int?
+  MedicamentPilulier    MedicamentPilulier[]
+}
+
+model PilulierJour {
+  Pilulier    Pilulier? @relation(fields: [pilulier_id], references: [id])
+  pilulier_id Int
+  jour        Jour?     @relation(fields: [jour_id], references: [id])
+  jour_id     Int
+
+  @@id([jour_id, pilulier_id])
+}
+
+model PilulierMomentJournee {
+  Pilulier         Pilulier?      @relation(fields: [pilulier_id], references: [id])
+  pilulier_id      Int
+  MomentJournee    MomentJournee? @relation(fields: [MomentJournee_id], references: [id])
+  MomentJournee_id Int
+
+  @@id([MomentJournee_id, pilulier_id])
+}
+
+model MedicamentPilulier {
+  Medicament   Medicament? @relation(fields: [medicamentId], references: [id])
+  medicamentId Int
+  Pilulier     Pilulier?   @relation(fields: [pilulierId], references: [id])
+  pilulierId   Int
+
+  @@id([medicamentId, pilulierId])
+}
+
+model Jour {
+  id           Int            @id @default(autoincrement())
+  nom          String
+  PilulierJour PilulierJour[]
+}
+
+model MomentJournee {
+  id                    Int                     @id @default(autoincrement())
+  nom                   String
+  PilulierMomentJournee PilulierMomentJournee[]
+}
+
+model EffetSecondaire {
+  id           Int         @id @default(autoincrement())
+  nom          String
+  description  String
+  Medicament   Medicament? @relation(fields: [medicamentId], references: [id])
+  medicamentId Int?
 }
