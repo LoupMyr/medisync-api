@@ -9,6 +9,7 @@ const CreateMedicament = async (req, res) => {
     description,
     stockDisponible,
     dosage,
+    limite,
     forme_pharmacotique,
     avecOrdonnance,
     userId, // The userId to link the medicament with a user
@@ -19,6 +20,7 @@ const CreateMedicament = async (req, res) => {
     !description ||
     !stockDisponible ||
     !dosage ||
+    !limite ||
     !forme_pharmacotique ||
     typeof avecOrdonnance === "undefined" ||
     !userId
@@ -35,6 +37,7 @@ const CreateMedicament = async (req, res) => {
         description,
         stockDisponible: parseInt(stockDisponible),
         dosage: parseInt(dosage),
+        limite: parseInt(limite),
         forme_pharmacotique,
         avecOrdonnance: Boolean(avecOrdonnance),
         userId: parseInt(userId), // Linking the medicament to the user

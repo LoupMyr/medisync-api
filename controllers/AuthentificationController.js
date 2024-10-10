@@ -36,7 +36,7 @@ const authentification = async (req, res) => {
         });
 
         // Retourner la réponse avec le token et les données utilisateur
-        return res.json({
+        return res.status(201).json({
             "message": "success",
             "token": token,
             "data": { id: user.id, email: user.email },

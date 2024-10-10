@@ -24,14 +24,14 @@ const addMedicament = async (req, res) => {
   }
   try {
     const newJourMedic = await prisma.medicamentJourPilulier.create({
-        data: {
-            medicamentId,
-            jour_id : jourId,
-            pilulierId,
-            MomentJournee_id: momentJourneeId,
-            quantite,
-            EstPris: false,
-          },
+      data: {
+        medicamentId,
+        jour_id: jourId,
+        pilulierId,
+        MomentJournee_id: momentJourneeId,
+        quantite,
+        EstPris: false,
+      },
     });
     res.status(201).json(newJourMedic);
   } catch (error) {
@@ -45,7 +45,8 @@ const addMedicament = async (req, res) => {
 const patchEstPris = async (req, res) => {
   const { id } = req.params;
   const { estPris } = req.body;
-  if (!estPris) {
+  console.log(estPris);
+  if (estPris === undefined) {
     return res
       .status(400)
       .json({ error: "Please provide all required fields" });
@@ -76,7 +77,25 @@ const patchEstPris = async (req, res) => {
   }
 };
 
+const getMedicamentsByPilulierId = async (req, res) => {
+  const { id } = req.params;
+  const elements = await prisma.medicamentJourPilulier.findMany({
+    where: {
+      pilulierId: parseInt(id),
+    },
+  });
+  var result = [];
+  for (const elt of elements) {
+    const medicament = await prisma.medicament.findUnique({
+      where: { id: elt.medicamentId },
+    });
+    result.push({id: elt.id, quantite: elt.quantite, estPris: elt.EstPris, medicament: medicament, journee: elt.jour_id, momentJournee: elt.MomentJournee_id});
+  }
+  res.status(200).json(result);
+};
+
 module.exports = {
-    addMedicament,
-    patchEstPris
-  };
+  addMedicament,
+  patchEstPris,
+  getMedicamentsByPilulierId,
+};

@@ -29,6 +29,7 @@ model Medicament {
   description            String
   stockDisponible        Int
   dosage                 Int
+  limite                 Int
   forme_pharmacotique    String
   avecOrdonnance         Boolean
   User                   User                     @relation(fields: [userId], references: [id])
