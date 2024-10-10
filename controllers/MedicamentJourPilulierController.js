@@ -45,7 +45,6 @@ const addMedicament = async (req, res) => {
 const patchEstPris = async (req, res) => {
   const { id } = req.params;
   const { estPris } = req.body;
-  console.log(estPris);
   if (estPris === undefined) {
     return res
       .status(400)

@@ -4,7 +4,6 @@ const bcrypt = require("bcrypt");
 const prisma = new PrismaClient();
 
 const getUsers = async (req, res) => {
-  console.log("here");
   const users = await prisma.user.findMany();
   res.json(users);
 };
@@ -72,14 +71,12 @@ const postUser = async (req, res) => {
 
 const getPilulierByUserId = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
   try {
     const piluliers = await prisma.pilulier.findMany({
       where: {
         userId: parseInt(id),
       },
     });
-    console.log(piluliers);
     if (piluliers.length > 0) {
       res.json(piluliers);
     } else {
