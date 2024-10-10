@@ -1,12 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const {
-    authentification
-} = require('../controllers/AuthentificationController.js')
+  authentification,
+} = require("../controllers/AuthentificationController.js");
 
+router.post("/", authentification);
 
-router.post("/", authentification)
-
-
-
-module.exports = router
+module.exports = router;

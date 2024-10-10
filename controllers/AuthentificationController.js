@@ -48,18 +48,6 @@ const authentification = async (req, res) => {
     }
 };
 
-
-function hashPasswordSync(password) {
-    try {
-
-        const hashedPassword = bcrypt.hashSync(password, 12);
-
-
-        return hashedPassword;
-    } catch (error) {
-        throw new Error('Failed to hash password');
-    }
-}
 module.exports = {
     authentification
 };
